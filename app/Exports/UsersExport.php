@@ -2,14 +2,11 @@
 
 namespace App\Exports;
 
-use App\Models\Order;
-use Illuminate\Contracts\View\View;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UsersExport implements FromView
+class UsersExport implements FromArray, WithHeadings
 {
     protected $data;
 
@@ -18,35 +15,23 @@ class UsersExport implements FromView
         $this->data = $data;
     }
 
-    // /**
-    // * @return \Illuminate\Support\Collection
-    // */
-    // public function collection()
-    // {
-    //     return $this->data;
-    // }
+    /**
+     * @return array
+     */
+    public function headings(): array {
+        $headings = [];
+        foreach ( $this->data->toArray()[0] as $key => $value ) {
+            $headings[] = User::HEADINGS[$key];
+        }
 
-    // /**
-    //  * @return array
-    //  */
-    // public function array(): array
-    // {
-    //     return $this->data->toArray();
-    // }
-
-    // /**
-    //  * @return Builder|EloquentBuilder|Relation
-    //  */
-    // public function query() {
-    //     return Order::where('amount', '>', 50);
-    // }
+        return $headings;
+    }
 
     /**
-     * @return View
+     * @return array
      */
-    public function view(): View {
-        return view('orders', [
-            'data' => $this->data
-        ]);
+    public function array(): array
+    {
+        return $this->data->toArray();
     }
 }

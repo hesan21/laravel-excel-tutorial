@@ -13,6 +13,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const HEADINGS = [
+        'id' => '#',
+        'name' => 'Name',
+        'email' => 'Email Address',
+        'phone_no' => 'Phone Number',
+        'address' => 'Address'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -34,6 +42,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        'created_at',
+        'updated_at'
     ];
 
     /**
