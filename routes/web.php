@@ -1,8 +1,7 @@
 <?php
 
-use App\Exports\UsersExport;
+use App\Http\Controllers\ExportsController;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('users/export/', function () {
-    return Excel::download(new UsersExport, 'users.xlsx');
-})->name('users.export');
+Route::get('export/', [ ExportsController::class, 'export' ])->name('export');
