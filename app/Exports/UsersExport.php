@@ -5,8 +5,9 @@ namespace App\Exports;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class UsersExport implements FromArray, WithHeadings
+class UsersExport implements FromArray, WithHeadings, WithMapping
 {
     protected $data;
 
@@ -33,5 +34,43 @@ class UsersExport implements FromArray, WithHeadings
     public function array(): array
     {
         return $this->data->toArray();
+    }
+
+    public function prepareRows($rows)
+    {
+        foreach ($rows as $key => $user) {
+            $rows[$key]['name'].= '(prepared)';
+        }
+        return $rows;
+    }
+
+     /**
+     * @param  mixed  $row
+     * @return array
+     */
+    public function map($row): array {
+        return [
+            // [
+                $row['id'],
+                $row['name'],
+                $row['email'],
+                $row['address'],
+                $row['phone_no']
+            // ],
+            // [
+            //     $row['id'],
+            //     $row['name'],
+            //     $row['email'],
+            //     $row['address'],
+            //     '----'
+            // ],
+            // [
+            //     $row['id'],
+            //     $row['name'],
+            //     $row['email'],
+            //     '----',
+            //     $row['phone_no']
+            // ]
+        ];
     }
 }
