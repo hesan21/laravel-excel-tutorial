@@ -6,9 +6,12 @@ use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\Exportable;
 
 class UsersExport implements FromArray, WithHeadings, WithMapping
 {
+    use Exportable;
+
     protected $data;
 
     public function __construct($data)
