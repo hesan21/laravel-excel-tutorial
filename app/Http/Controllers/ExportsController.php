@@ -15,7 +15,7 @@ class ExportsController extends Controller
         $users = User::all();
         // $orders = Order::all();
         // return Excel::store(new UsersExport($users), 'users.xlsx');
-        return (new UsersExport($users))->store('users.xlsx');
+        return (new UsersExport($users))->download('users.xlsx');
         // return (new UsersExport($users));
     }
 }
