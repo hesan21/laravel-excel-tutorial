@@ -2,13 +2,15 @@
 
 namespace App\Exports;
 
+use App\Models\Order;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class UsersExport implements FromArray, WithHeadings, WithMapping
+class UsersExport implements FromArray, WithHeadings, WithMapping, WithStrictNullComparison
 {
     use Exportable;
 
@@ -27,7 +29,7 @@ class UsersExport implements FromArray, WithHeadings, WithMapping
         foreach ( $this->data->toArray()[0] as $key => $value ) {
             $headings[] = User::HEADINGS[$key];
         }
-
+        $headings[] = 'Failed Orders Count';
         return $headings;
     }
 
@@ -58,7 +60,8 @@ class UsersExport implements FromArray, WithHeadings, WithMapping
                 $row['name'],
                 $row['email'],
                 $row['address'],
-                $row['phone_no']
+                $row['phone_no'],
+                Order::where('status', 'failed')->where('user_id', $row['id'])->count()
             // ],
             // [
             //     $row['id'],
