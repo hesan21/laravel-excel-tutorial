@@ -2,12 +2,15 @@
 
 namespace App\Exports;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Throwable;
 
-class UsersExport implements WithMultipleSheets
+class UsersExport implements WithMultipleSheets, ShouldQueue
 {
-    use Exportable;
+    use Exportable, Queueable;
 
     protected $data;
 
@@ -24,5 +27,9 @@ class UsersExport implements WithMultipleSheets
             $sheets[] = new UserSheetExport($user);
         }
         return $sheets;
+    }
+
+    public function failed(Throwable $exception) {
+        // Handle Error
     }
 }
