@@ -4,20 +4,24 @@ namespace App\Exports;
 
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithDefaultStyles;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Style\Style as DefaultStyles;
 
 
-class UserSheetExport implements WithTitle, WithHeadings, FromQuery, WithMapping, WithColumnWidths, ShouldAutoSize, WithStyles
+class UserSheetExport implements WithTitle, WithHeadings, FromQuery, WithMapping, WithColumnWidths, ShouldAutoSize, WithStyles, WithEvents
 {
+    use RegistersEventListeners;
     public $user;
 
     public function __construct ($user) {
@@ -82,5 +86,10 @@ class UserSheetExport implements WithTitle, WithHeadings, FromQuery, WithMapping
                 'vertical' => Style\Alignment::VERTICAL_CENTER,
             ],
         ];
+    }
+
+    public static function afterSheet(AfterSheet $event)
+    {
+        return $event->sheet->getDelegate()->setRightToLeft(true);
     }
 }
