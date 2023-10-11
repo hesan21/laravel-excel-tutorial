@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('export/', [ ExportsController::class, 'export' ])->name('export');
+Route::get('import/', [ ExportsController::class, 'import' ])->name('import');
